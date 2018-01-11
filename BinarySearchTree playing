@@ -1,0 +1,109 @@
+//Mycodeschool's Binary search tree playing around
+#include "stddef.h"
+#include <iostream>
+using namespace std;
+struct bstNode//node definition for binary tree
+{
+	int data;
+	bstNode* left;
+	bstNode* right;
+};
+
+
+bstNode* GetNewNode(int data) //creates a new node
+{
+	bstNode* newNode = new bstNode();
+	newNode->data = data;
+	newNode->left = newNode->right = NULL;
+	return newNode;
+
+}
+bool Search(bstNode* root, int data)
+{
+	if(root == NULL) return false; //empty case
+	else if(root->data == data) 
+		return true;// found case
+	else if(data <= root->data)
+	{
+		cout<<root->data<<endl;
+		return Search(root->left, data);
+	}
+	else{
+		cout<<root->data<<endl;
+		return Search(root->right, data);
+	}
+}
+
+bstNode* Insert(bstNode* root, int data) {
+	if(root == NULL){
+		root = GetNewNode(data); 
+		cout<< data<< endl;
+	}
+	else if(data <= root->data) {
+		root->left = Insert(root->left,data);
+	}
+	else {
+		root->right = Insert(root->right, data);
+	}
+	return root;
+
+}
+bstNode* FindMin(bstNode* root)
+{
+	while(root->left != NULL) root = root->left;
+	return root;
+}
+
+bstNode* Delete(bstNode *root, int data )
+{
+	if(root ==NULL) return root;
+	else if(data < root->data)//searching the node
+		root->left = Delete(root->left,data);
+	else if(data > root->data)//searching the node with right data
+		root->right = Delete(root->right,data);
+	else //found the node with matching data 
+	{
+		//case1:no child
+		if(root->left == NULL && root->right == NULL){
+			delete root;
+			root = NULL;
+		}
+		else if(root->left ==NULL)//case 2: one child
+		{
+			bstNode* temp = root;
+			root = root->right;
+			delete temp;
+		}
+		else if(root->right == NULL){
+			bstNode* temp = root;
+			root = root->left;
+			delete temp;
+		}
+		//case 3: 2 children
+		else{
+			bstNode* temp = FindMin(root->right);
+			root->data = temp->data; //duplicates the min in rightsubtree to the root
+			root->right = Delete(root->right, temp->data); //deletes duplicate in right subtree
+
+
+		}
+	}
+	return root;
+}
+int main()
+{
+	bstNode* root = NULL;
+		root = Insert(root,15); // we've formally declared root
+	root = Insert(root,10);
+	 root = Insert(root,20);
+	 root = Insert(root,69);
+	 root = Insert(root,2);
+	int number;
+	cout<<"Enter a number to search";
+	cin>> number;
+	if(Search(root,number)==true) cout<<"found";
+	else cout<< "not found";
+	return 0;
+}
+
+
