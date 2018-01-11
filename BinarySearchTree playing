@@ -103,6 +103,8 @@ int main()
 	cin>> number;
 	if(Search(root,number)==true) cout<<"found";
 	else cout<< "not found";
+	
+	cout<<endl<<"It was nice working with ya ! "<<endl;
 	return 0;
 }
 
